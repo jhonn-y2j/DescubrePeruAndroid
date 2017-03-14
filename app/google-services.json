@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "49703975302-490vba5rif56n5u7ci23qu85e3vmmqkf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jhonn_aj.descubreperuandroid",
+            "certificate_hash": "aef7ef1b41a924061545a284b3f80473a58cf1fa"
+          }
+        },
+        {
           "client_id": "49703975302-t00j4poh8hs61ku611t8f2h6da2ldpt8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
