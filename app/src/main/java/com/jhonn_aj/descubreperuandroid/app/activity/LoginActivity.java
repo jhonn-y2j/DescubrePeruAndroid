@@ -31,6 +31,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.TwitterAuthProvider;
 import com.jhonn_aj.descubreperuandroid.R;
@@ -116,16 +117,34 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void signInTwitter(){
+        rlaProgress.setVisibility(View.VISIBLE);
         authClient.authorize(LoginActivity.this , new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
                 Log.d(TAG, "twitterLogin:success" + result);
+                rlaProgress.setVisibility(View.GONE);
                 initAutetnticationTwitter(result.data);
             }
 
             @Override
             public void failure(TwitterException exception) {
                 Log.d(TAG, "twitterLogin:failure" + exception);
+                rlaProgress.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void requerirEmailTwitter(TwitterSession session){
+        authClient.requestEmail(session, new Callback<String>() {
+            @Override
+            public void success(Result<String> result) {
+                FirebaseUser user = mFirebaseAuth.getCurrentUser();
+                user.updateEmail(result.data);
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                // Do something on failure
             }
         });
     }
@@ -148,7 +167,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     Toast.makeText(LoginActivity.this, "Authentication failed.",
                             Toast.LENGTH_SHORT).show();
                     rlaProgress.setVisibility(View.GONE);
-                }else{
+                } else{
                     rlaProgress.setVisibility(View.GONE);
                     startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
                     finish();
