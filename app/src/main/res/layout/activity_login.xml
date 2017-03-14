@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/colorWhite"
+    android:layout_height="match_parent">
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_mic_black_24dp"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:background="@color/colorWhite"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:src="@mipmap/ic_launcher"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/edit_email"
+            android:gravity="center"
+            android:inputType="textEmailAddress"
+            android:imeOptions="actionNext"
+            android:layout_width="match_parent"
+            android:hint="@string/email"
+            android:layout_margin="@dimen/imgbtn_margin"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/edit_password"
+            android:inputType="textPassword"
+            android:imeOptions="actionDone"
+            android:gravity="center"
+            android:layout_margin="@dimen/imgbtn_margin"
+            android:hint="@string/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn_sesion"
+            android:text="Iniciar Sesión"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/custom_btn_fb"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:layout_margin="@dimen/imgbtn_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+       <LinearLayout
+           android:layout_gravity="center"
+           android:gravity="center"
+           android:orientation="horizontal"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+
+           <ImageButton
+               android:id="@+id/btn_fb"
+               android:background="@drawable/custom_btn_fb"
+               android:layout_margin="@dimen/imgbtn_margin"
+               android:padding="@dimen/activity_horizontal_margin"
+               android:src="@drawable/ic_fb"
+               android:tint="@color/colorWhite"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content" />
+
+           <ImageButton
+               android:id="@+id/btn_twitter"
+               android:background="@drawable/custom_btn_twitter"
+               android:layout_margin="@dimen/fab_margin"
+               android:padding="@dimen/activity_horizontal_margin"
+               android:src="@drawable/ic_twitter"
+               android:tint="@color/colorWhite"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content" />
+
+           <ImageButton
+               android:id="@+id/btn_google"
+               android:layout_width="wrap_content"
+               android:background="@drawable/custom_btn_google"
+               android:layout_margin="@dimen/imgbtn_margin"
+               android:padding="@dimen/activity_horizontal_margin"
+               android:src="@drawable/ic_google"
+               android:tint="@color/colorWhite"
+               android:layout_height="wrap_content" />
+
+       </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_register"
+            android:text="@string/register"
+            android:background="@drawable/custom_btn"
+            android:textColor="@color/colorWhite"
+            android:drawableRight="@drawable/ic_chevron_right_black_24dp"
+            android:gravity="center"
+            android:layout_margin="@dimen/imgbtn_margin"
+            android:drawableTint="@color/colorWhite"
+            android:paddingRight="@dimen/imgbtn_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+    <include layout="@layout/layout_progress_bar" />
+
+</RelativeLayout>

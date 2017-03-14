@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Descubre Perú v1</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="home">Inicio</string>
+    <string name="where_to_go">¿Dónde ir?</string>
+    <string name="travels">Viajes</string>
+    <string name="event">Eventos</string>
+    <string name="favorite">Mis favoritos</string>
+    <string name="comunity">Comunidad</string>
+    <string name="settings">Preferencias</string>
+    <string name="help">Ayuda</string>
+    <string name="close_sesion">Cerrar Sesión</string>
+    <string name="email">Correo  electrónico</string>
+    <string name="password">Contraseña</string>
+    <string name="register">Registrate aquí</string>
+
+</resources>

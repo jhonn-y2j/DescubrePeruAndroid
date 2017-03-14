@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_map_black_24dp"
+            android:title="@string/where_to_go" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/ic_place_black_24dp"
+            android:title="@string/travels" />
+
+        <item
+            android:id="@+id/nav_event"
+            android:icon="@drawable/ic_event_black_24dp"
+            android:title="@string/event" />
+        <item
+            android:id="@+id/nav_favorite"
+            android:icon="@drawable/ic_star_black_24dp"
+            android:title="@string/favorite" />
+        <item
+            android:id="@+id/nav_comunity"
+            android:icon="@drawable/ic_group_black_24dp"
+            android:title="@string/comunity" />
+
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/settings" />
+
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/ic_help_black_24dp"
+            android:title="@string/help" />
+
+    </group>
+
+    <group android:menuCategory="secondary"
+        android:checkableBehavior="single">
+
+            <item
+                android:id="@+id/nav_close_session"
+                android:icon="@drawable/ic_close_black_24dp"
+                android:title="@string/close_sesion" />
+
+    </group>
+
+</menu>

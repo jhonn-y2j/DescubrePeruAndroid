@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "49703975302",
+    "firebase_url": "https://descubreperu-dff08.firebaseio.com",
+    "project_id": "descubreperu-dff08",
+    "storage_bucket": "descubreperu-dff08.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:49703975302:android:2fd749e3827a5a4b",
+        "android_client_info": {
+          "package_name": "com.jhonn_aj.descubreperuandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "49703975302-t00j4poh8hs61ku611t8f2h6da2ldpt8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jhonn_aj.descubreperuandroid",
+            "certificate_hash": "538afe64da01b3bba0c0162e0e0ad18d8916a3b9"
+          }
+        },
+        {
+          "client_id": "49703975302-kfifut3s2g7lvm8a8ej6vlmse1gh4hva.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7ulFKa1Uy0VpxM-GwblP-C3SfZrXWobo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "49703975302-kfifut3s2g7lvm8a8ej6vlmse1gh4hva.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
