@@ -32,7 +32,15 @@ import com.google.firebase.auth.FacebookAuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.TwitterAuthProvider;
 import com.jhonn_aj.descubreperuandroid.R;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +49,7 @@ import java.util.Collection;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by jhonn_aj on 12/03/2017.
@@ -50,6 +59,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     //keytool -exportcert -alias androiddebugkey -list -v -keystore "C:\Users\DP6ASUS\.android\debug.keystore" |
     // "C:\OpenSSL\bin\openssl.exe" sha1 -binary | "C:\OpenSSL\bin\openssl.exe" base64
+
+    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
+    private static final String TWITTER_KEY = "jKXQbHLIV7G5AXODaTbDDidpu";
+    private static final String TWITTER_SECRET = "vTLi35Qd3o3f1ZK8BeCbqk1KOCPjlOJ2Trnn5ZZrwAT68JTm1D";
     
     @BindView(R.id.edit_email) EditText editEmail;
     @BindView(R.id.edit_password) EditText editPassword;
@@ -67,11 +80,18 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private CallbackManager callbackManager;
 
+    private TwitterAuthClient authClient;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new Twitter(authConfig));
+
+        authClient = new TwitterAuthClient();
 
         callbackManager = CallbackManager.Factory.create();
 
@@ -88,6 +108,54 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @OnClick(R.id.btn_fb)
     public void handleSessionFb(){
         signInFb();
+    }
+
+    @OnClick(R.id.btn_twitter)
+    public void handleSessionTwitter(){
+        signInTwitter();
+    }
+
+    private void signInTwitter(){
+        authClient.authorize(LoginActivity.this , new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                Log.d(TAG, "twitterLogin:success" + result);
+                initAutetnticationTwitter(result.data);
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                Log.d(TAG, "twitterLogin:failure" + exception);
+            }
+        });
+    }
+
+    private  void initAutetnticationTwitter(final TwitterSession session){
+        AuthCredential credential = TwitterAuthProvider.getCredential(session.getAuthToken().token,
+                session.getAuthToken().secret);
+        rlaProgress.setVisibility(View.VISIBLE);
+        mFirebaseAuth.signInWithCredential(credential).addOnCompleteListener(LoginActivity.this,
+                new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
+
+                // If sign in fails, display a message to the user. If sign in succeeds
+                // the auth state listener will be notified and logic to handle the
+                // signed in user can be handled in the listener.
+                if (!task.isSuccessful()) {
+                    Log.w(TAG, "signInWithCredential", task.getException());
+                    Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Toast.LENGTH_SHORT).show();
+                    rlaProgress.setVisibility(View.GONE);
+                }else{
+                    rlaProgress.setVisibility(View.GONE);
+                    startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+                    finish();
+                }
+            }
+        });
+
     }
 
     private void signInFb(){
@@ -175,6 +243,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         // Fb
         callbackManager.onActivityResult(requestCode, resultCode, data);
+        // twitter
+        authClient.onActivityResult(requestCode, resultCode, data);
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
