@@ -116,6 +116,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         signInTwitter();
     }
 
+    @OnClick(R.id.btn_sesion)
+    public void handleInitSession(){
+
+    }
+
     private void signInTwitter(){
         rlaProgress.setVisibility(View.VISIBLE);
         authClient.authorize(LoginActivity.this , new Callback<TwitterSession>() {
@@ -124,6 +129,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 Log.d(TAG, "twitterLogin:success" + result);
                 rlaProgress.setVisibility(View.GONE);
                 initAutetnticationTwitter(result.data);
+                requerirEmailTwitter(result.data);
             }
 
             @Override
@@ -138,13 +144,27 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         authClient.requestEmail(session, new Callback<String>() {
             @Override
             public void success(Result<String> result) {
-                FirebaseUser user = mFirebaseAuth.getCurrentUser();
-                user.updateEmail(result.data);
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                user.updateEmail(result.data).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (!task.isSuccessful()){
+                            Log.w(TAG, "signInWithCredential", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            rlaProgress.setVisibility(View.GONE);
+                        }else{
+                            rlaProgress.setVisibility(View.GONE);
+                            startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+                            finish();
+                        }
+                    }
+                });
             }
 
             @Override
             public void failure(TwitterException exception) {
-                // Do something on failure
+                Log.v(TAG, "twitterLOgin:failure-email" + exception);
             }
         });
     }
@@ -167,10 +187,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     Toast.makeText(LoginActivity.this, "Authentication failed.",
                             Toast.LENGTH_SHORT).show();
                     rlaProgress.setVisibility(View.GONE);
-                } else{
-                    rlaProgress.setVisibility(View.GONE);
-                    startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
-                    finish();
                 }
             }
         });
