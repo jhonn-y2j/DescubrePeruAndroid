@@ -118,6 +118,32 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     @OnClick(R.id.btn_sesion)
     public void handleInitSession(){
+        if (editEmail.getText().length() == 0)
+            return ;
+        if (editPassword.getText().length() == 0)
+            return;
+
+        initSession(editEmail.getText().toString(), editPassword.getText().toString());
+    }
+
+    private void initSession(String email, String password){
+        rlaProgress.setVisibility(View.VISIBLE);
+        mFirebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                Log.d(TAG, "signInWithEmailAndPassword:onComplete:" + task.isSuccessful());
+                if (!task.isSuccessful()){
+                    Log.w(TAG, "signInWithEmailAndPassword", task.getException());
+                    Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Toast.LENGTH_SHORT).show();
+                    rlaProgress.setVisibility(View.GONE);
+                }else{
+                    rlaProgress.setVisibility(View.GONE);
+                    startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+                    finish();
+                }
+            }
+        });
 
     }
 
