@@ -20,5 +20,9 @@
 
     <string name="facebook_app_id">1317431455017651</string>
     <string name="fb_login_protocol_scheme">fb1317431455017651</string>
+    <string name="name">Nombres y Apellidos</string>
+    <string name="phone">Teléfono</string>
+    <string name="register_users">Registrar</string>
+    <string name="image_profile">Seleccionar imagen de perfil</string>
 
 </resources>

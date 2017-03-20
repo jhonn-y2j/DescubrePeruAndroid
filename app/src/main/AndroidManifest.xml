@@ -27,6 +27,9 @@
             android:screenOrientation="sensorPortrait"
             />
 
+        <activity android:name=".app.activity.RegisterActivity"
+            android:screenOrientation="sensorPortrait"/>
+
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">

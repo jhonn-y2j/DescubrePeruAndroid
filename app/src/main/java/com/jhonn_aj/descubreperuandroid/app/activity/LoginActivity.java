@@ -126,6 +126,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         initSession(editEmail.getText().toString(), editPassword.getText().toString());
     }
 
+    @OnClick(R.id.btn_register)
+    public void handleRegister(){
+        startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+        finish();
+    }
+
     private void initSession(String email, String password){
         rlaProgress.setVisibility(View.VISIBLE);
         mFirebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
