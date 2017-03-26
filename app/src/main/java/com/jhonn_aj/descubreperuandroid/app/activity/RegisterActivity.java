@@ -24,6 +24,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -59,10 +61,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     private int SELECT_PICTURE = 300;
 
-    private FirebaseStorage storage ;
-
-    private StorageReference storageReference;
-
     public static final String TAG = "RegisterActivity";
 
     @Override
@@ -71,8 +69,6 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
 
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReferenceFromUrl("gs://descubreperu-dff08.appspot.com");
     }
 
     @OnClick(R.id.llaBack)
@@ -107,40 +103,39 @@ public class RegisterActivity extends AppCompatActivity {
                                 rlaProgress.setVisibility(View.GONE);
                             }else{
                                 final FirebaseUser userFirebase = task.getResult().getUser();
+                                User user = new User(userFirebase.getUid(), edit_name.getText().toString(),
+                                        edit_email.getText().toString(), edit_password.getText().toString(),
+                                        null, edit_phone.getText().toString(), Calendar.getInstance().getTime().toString());
 
-                                //upImageProfile();
-
-                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                        .setDisplayName(edit_name.getText().toString())
-                                        .setPhotoUri(Uri.parse("https://firebasestorage.googleapis.com/v0/b/descubreperu-dff08.appspot.com/o/" +
-                                                "profiles%2Favatar.png?alt=media&token=8634c96d-4c58-4818-a0a7-3448bd151482"))
-                                        //.setPhotoUri(storageReference.getDownloadUrl().getResult())
-                                        .build();
-
-                                userFirebase.updateEmail(edit_email.getText().toString());
-
-                                userFirebase.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                FirebaseDatabase.getInstance().getReference("users").child(userFirebase.getUid()).setValue(user, new DatabaseReference.CompletionListener() {
                                     @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        User user = new User(userFirebase.getUid(), edit_name.getText().toString(), edit_email.getText().toString(),
-                                                edit_password.getText().toString(), null,
-                                                edit_phone.getText().toString(), Calendar.getInstance().getTime().toString());
+                                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                        if (databaseError == null){
+                                            String key = databaseReference.getKey();
+                                            StorageReference storageReference =
+                                                    FirebaseStorage.getInstance()
+                                                            .getReference("profiles/").child(key);
 
-                                        FirebaseDatabase.getInstance().getReference("users").child(userFirebase.getUid()).setValue(user);
+                                            putImageProfile(storageReference, userFirebase, key);
 
-                                        Intent intent = new Intent(RegisterActivity.this, DashboardActivity.class);
-                                        startActivity(intent);
-                                        finish();
+                                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                            startActivity(intent);
+                                            finish();
+
+                                        }else {
+                                            Log.w(TAG, "Unable to write message to database.",
+                                                    databaseError.toException());
+                                        }
                                     }
                                 });
+                                rlaProgress.setVisibility(View.GONE);
                             }
-                            rlaProgress.setVisibility(View.GONE);
                         }
                     });
         }
     }
 
-    private void upImageProfile(){
+    private void putImageProfile(final StorageReference storageReference, final FirebaseUser userFirebase, final String key){
         img_profile.setDrawingCacheEnabled(true);
         img_profile.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         img_profile.layout(0, 0, img_profile.getMeasuredWidth(), img_profile.getMeasuredHeight());
@@ -161,9 +156,40 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Log.v( TAG, "LoadFirebaseStorage:onCompleted ");
+                updateProfileFirebase(storageReference,userFirebase, key);
             }
         });
     }
+
+    private void updateProfileFirebase(StorageReference storageReference , final FirebaseUser firebaseUser, final String key){
+        storageReference.getDownloadUrl().addOnSuccessListener(RegisterActivity.this, new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                .setDisplayName(edit_name.getText().toString())
+                                .setPhotoUri(uri)
+                                .build();
+
+                        firebaseUser.updateEmail(edit_email.getText().toString());
+
+                        firebaseUser.updateProfile(profileUpdates).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Log.v(TAG, "Perfil actualizado");
+                            }
+                        });
+
+                        User user = new User(firebaseUser.getUid(), edit_name.getText().toString(),
+                                edit_email.getText().toString(), edit_password.getText().toString(),
+                                uri.toString(), edit_phone.getText().toString(), Calendar.getInstance().getTime().toString());
+
+                        Log.v(TAG, "uri" + uri.toString());
+                        FirebaseDatabase.getInstance().getReference("users").child(key).setValue(user);
+                    }
+                }
+        );
+    }
+
 
     private boolean validateFields(){
 

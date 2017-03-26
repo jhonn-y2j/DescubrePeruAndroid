@@ -48,7 +48,7 @@
                 android:background="@drawable/custom_layout_edit"
                 android:inputType="textEmailAddress"
                 android:imeOptions="actionNext"
-                android:textColor="@color/colorWhite"
+                android:textColor="@color/colorFooter"
                 android:layout_width="match_parent"
                 android:hint="@string/email"
                 android:layout_margin="@dimen/imgbtn_margin"
@@ -74,11 +74,12 @@
 
             <EditText
                 android:id="@+id/edit_password"
-                android:textColor="@color/colorWhite"
+                android:textColor="@color/colorFooter"
                 android:background="@drawable/custom_layout_edit"
                 android:inputType="textPassword"
                 android:imeOptions="actionDone"
                 android:gravity="center"
+                android:maxLength="8"
                 android:layout_margin="@dimen/imgbtn_margin"
                 android:hint="@string/password"
                 android:layout_width="match_parent"
