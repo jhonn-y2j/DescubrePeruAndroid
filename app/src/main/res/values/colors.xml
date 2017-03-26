@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#9C27B0</color>
+    <color name="colorAccent">#69f0ae</color>
 
     <color name="colorFooter">#90000000</color>
     <color name="colorBlackTransparent">#B2000000</color>
@@ -11,12 +11,16 @@
     <color name="colorRed">#F44336</color>
     <color name="colorBlue">#3F51B5</color>
     <color name="colorCeleste">#03A9F4</color>
+    <color name="colorCeleste1">#2196f3</color>
     <color name="colorGreen">#4CAF50</color>
     <color name="colorPink">#FF4081</color>
     <color name="colorGray">#9E9E9E</color>
+    <color name="colorMorado">#9c27b0</color>
 
     <color name="colorEscudo">#FF9800</color>
     <color name="colorEscudo2">#FFECB3</color>
+
+    <color name="background_login">#ffe0b2</color>
 
     <integer-array name="colorProgress">
         <item >@color/colorEscudo</item>

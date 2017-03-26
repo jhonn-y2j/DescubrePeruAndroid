@@ -16,6 +16,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_margin="@dimen/activity_horizontal_margin"
+            android:background="@color/colorWhite"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -77,7 +78,7 @@
                 android:scaleType="centerCrop"
                 android:layout_height="128dp"
                 android:layout_gravity="center"
-                app:srcCompat="@mipmap/ic_launcher" />
+                app:srcCompat="@mipmap/ic_launcher_round" />
 
             <Button
                 android:id="@+id/btn_image_profile"
