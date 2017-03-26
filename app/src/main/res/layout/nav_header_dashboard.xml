@@ -16,10 +16,10 @@
         android:id="@+id/circle_image"
         android:layout_gravity="center"
         android:src="@drawable/ic_google"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        app:border_color="@android:color/white"
-        app:border_width="2dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        app:border_color="@android:color/transparent"
+        app:border_width="1dp"
         >
 
     </de.hdodenhof.circleimageview.CircleImageView>
