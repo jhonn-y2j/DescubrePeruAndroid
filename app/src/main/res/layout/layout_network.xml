@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:id="@+id/disconnected"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/colorWhite"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:text="No hay conexión a internet"
+            android:gravity="center"
+            android:background="@color/colorRed"
+            android:layout_height="wrap_content" />
+
+
+        <ImageButton
+            android:id="@+id/img_close_disconnected"
+            android:layout_width="wrap_content"
+            android:padding="10dp"
+            android:layout_gravity="center"
+            android:background="@color/colorRed"
+            android:src="@drawable/ic_close_black_24dp"
+            android:layout_height="match_parent" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:id="@+id/connected"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textColor="@color/colorWhite"
+            android:padding="10dp"
+            android:text="Conectado"
+            android:gravity="center"
+            android:background="@color/colorGreen"
+            android:layout_height="wrap_content" />
+
+        <ImageButton
+            android:id="@+id/img_close_connected"
+            android:layout_width="wrap_content"
+            android:padding="10dp"
+            android:layout_gravity="center"
+            android:background="@color/colorGreen"
+            android:src="@drawable/ic_close_black_24dp"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+</LinearLayout>

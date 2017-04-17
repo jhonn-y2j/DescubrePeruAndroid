@@ -7,9 +7,15 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -34,7 +40,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.TwitterAuthProvider;
+import com.jhonn_aj.descubreperuandroid.MyApp;
 import com.jhonn_aj.descubreperuandroid.R;
+import com.jhonn_aj.descubreperuandroid.app.utils.InternetConnection;
+import com.jhonn_aj.descubreperuandroid.app.utils.NetworkChangeReceiver;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -44,7 +53,6 @@ import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 import butterknife.BindView;
@@ -56,7 +64,7 @@ import io.fabric.sdk.android.Fabric;
  * Created by jhonn_aj on 12/03/2017.
  */
 
-public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, NetworkChangeReceiver.receiverListener {
 
     //keytool -exportcert -alias androiddebugkey -list -v -keystore "C:\Users\DP6ASUS\.android\debug.keystore" |
     // "C:\OpenSSL\bin\openssl.exe" sha1 -binary | "C:\OpenSSL\bin\openssl.exe" base64
@@ -74,6 +82,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @BindView(R.id.btn_register) Button btnRegister;
     @BindView(R.id.rlaProgress) View rlaProgress;
 
+    @BindView(R.id.connected) LinearLayout connected;
+    @BindView(R.id.disconnected) LinearLayout disconnected;
+
     private FirebaseAuth mFirebaseAuth;
     private GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 9001;
@@ -89,6 +100,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+        if (!InternetConnection.checkInternetConnection(LoginActivity.this)){
+            isDisconnected();
+        }
+
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
 
@@ -99,6 +114,18 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         initAutenticationGoogle();
 
         mFirebaseAuth = FirebaseAuth.getInstance();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        MyApp.getInstance().setConnectivityListener(LoginActivity.this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @OnClick(R.id.btn_google)
@@ -345,5 +372,51 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
         Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
+    }
+
+    public void isConnected() {
+        connected.setVisibility(View.VISIBLE);
+        disconnected.setVisibility(View.GONE);
+    }
+
+    public void isDisconnected() {
+        disconnected.setVisibility(View.VISIBLE);
+        connected.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.img_close_connected)
+    public void handleCloseConnected(){
+        animationNetwork(connected);
+        connected.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.img_close_disconnected)
+    public void handleCloseDisconnected(){
+        animationNetwork(disconnected);
+        disconnected.setVisibility(View.GONE);
+    }
+
+    public void animationNetwork(LinearLayout layout){
+        /*AnimationSet set = new AnimationSet(true);
+        Animation animation = null;
+
+        animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 1.0f, Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f);
+
+        animation.setDuration(1000);
+        set.addAnimation(animation);
+        LayoutAnimationController controller = new LayoutAnimationController(set, 0.25f);*/
+        if (layout != null) {
+            //layout.setLayoutAnimation(controller);
+            Animation animation = AnimationUtils.loadAnimation(this, R.anim.ocultar);
+            layout.startAnimation(animation);
+        }
+
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        if (isConnected){
+            isConnected();
+        }else isDisconnected();
     }
 }

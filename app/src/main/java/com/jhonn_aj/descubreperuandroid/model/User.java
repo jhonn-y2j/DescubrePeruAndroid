@@ -2,12 +2,14 @@ package com.jhonn_aj.descubreperuandroid.model;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.io.Serializable;
+
 /**
  * Created by jhonn_aj on 19/03/2017.
  */
 
 @IgnoreExtraProperties
-public class User {
+public class User implements Serializable{
 
     private String token;
     private String name;

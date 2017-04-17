@@ -13,6 +13,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -30,7 +31,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.jhonn_aj.descubreperuandroid.MyApp;
 import com.jhonn_aj.descubreperuandroid.R;
+import com.jhonn_aj.descubreperuandroid.app.utils.InternetConnection;
+import com.jhonn_aj.descubreperuandroid.app.utils.NetworkChangeReceiver;
 import com.jhonn_aj.descubreperuandroid.model.User;
 
 import java.io.ByteArrayOutputStream;
@@ -45,7 +49,7 @@ import butterknife.OnClick;
  * Created by jhonn_aj on 19/03/2017.
  */
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements NetworkChangeReceiver.receiverListener{
 
     @BindView(R.id.llaBack) View llaBack;
     @BindView(R.id.edit_name) EditText edit_name;
@@ -56,6 +60,12 @@ public class RegisterActivity extends AppCompatActivity {
     @BindView(R.id.btn_image_profile) Button btn_img_profile;
     @BindView(R.id.btn_register_users) Button btn_register_users;
     @BindView(R.id.rlaProgress) View rlaProgress;
+
+    @BindView(R.id.connected) View connected;
+    @BindView(R.id.disconnected) View disconnected;
+
+    @BindView(R.id.img_close_connected) ImageButton close_connected;
+    @BindView(R.id.img_close_disconnected) ImageButton close_disconnected;
 
     private int PICK_IMAGE_REQUEST = 1;
 
@@ -69,12 +79,23 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
 
+        if (!InternetConnection.checkInternetConnection(RegisterActivity.this)){
+            isDisconnected();
+        }
+
     }
 
     @OnClick(R.id.llaBack)
     public void handleBack(){
         startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        MyApp.getInstance().setConnectivityListener(RegisterActivity.this);
     }
 
     @Override
@@ -247,5 +268,32 @@ public class RegisterActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void isConnected() {
+        connected.setVisibility(View.VISIBLE);
+        disconnected.setVisibility(View.GONE);
+    }
+
+    public void isDisconnected() {
+        disconnected.setVisibility(View.VISIBLE);
+        connected.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        if (isConnected){
+            isConnected();
+        }else isDisconnected();
+    }
+
+    @OnClick(R.id.img_close_connected)
+    public void handleCloseConnected(){
+        connected.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.img_close_disconnected)
+    public void handleCloseDisconnected(){
+        disconnected.setVisibility(View.GONE);
     }
 }

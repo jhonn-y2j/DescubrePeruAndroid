@@ -13,6 +13,8 @@
 
         <include layout="@layout/toolbar_register_activity" />
 
+        <include layout="@layout/layout_network" />
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_margin="@dimen/activity_horizontal_margin"
